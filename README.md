@@ -17,17 +17,21 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real-world recommendation systems often combine signals from user behavior, such as what similar people play, skip, save, or add to playlists, with content features that describe each song itself. This simulation focuses on the content-based side so the scoring stays transparent and easy to explain. My version will prioritize matching the user's preferred vibe by giving the most weight to genre, mood, and closeness on numeric features like energy, valence, danceability, acousticness, and tempo.
 
-Some prompts to answer:
+The dataset in `data/songs.csv` has been expanded from the original 10 songs to 18 songs so the recommender can compare across a wider variety of genres and moods, including pop, lofi, rock, ambient, jazz, synthwave, hip hop, folk, r&b, reggaeton, classical, edm, country, and metal.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+The `Song` object uses these features: `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, and `acousticness`.
 
-You can include a simple diagram or bullet list if helpful.
+The `UserProfile` object uses these preference fields: preferred `genre`, preferred `mood`, target `energy`, target `tempo_bpm`, target `valence`, target `danceability`, and target `acousticness`.
+
+My starter taste profile is: preferred `genre = pop`, preferred `mood = happy`, `target_energy = 0.80`, `target_tempo_bpm = 122`, `target_valence = 0.82`, `target_danceability = 0.84`, and `target_acousticness = 0.20`. This gives the recommender a clear target for upbeat, danceable, low-acousticness songs.
+
+My algorithm recipe uses a weighted score for each song. A matching `genre` is worth `+2.0` points because genre is the strongest first-pass signal for whether a song feels relevant at all. A matching `mood` is worth `+1.0` point because it captures vibe, but it is usually slightly broader and less specific than genre. The numeric features add similarity points based on closeness to the user's targets rather than rewarding higher values by default. `Energy` is the most important numeric signal, so it can contribute up to `+2.0` points. `Valence` and `danceability` can each contribute up to `+1.0` point, while `acousticness` and `tempo_bpm` can each contribute up to `+0.5` points. For each numeric feature, the score gets higher as the song gets closer to the user's preferred value. After scoring all songs, the system ranks them from highest score to lowest and recommends the top results.
+
+The data flow is: `Input (User Preferences) -> Process (loop through every song in songs.csv and score it) -> Output (sort by score and return the top k songs)`. Each song is judged one at a time against the same user taste profile, then the final recommendation list is built from the highest scoring results.
+
+One potential bias in this system is that it may over-prioritize `genre`, which could cause it to miss songs from other genres that still match the user's mood or overall vibe. It may also favor songs that are numerically close to the target values even when a real listener might want more variety or surprise in the results.
 
 ---
 
