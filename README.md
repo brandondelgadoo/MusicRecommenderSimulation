@@ -72,11 +72,54 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+I tested the recommender with four profiles:
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+- `High-Energy Pop`
+- `Chill Lofi`
+- `Deep Intense Rock`
+- `Conflicted Sad Party` as an edge-case profile with intentionally mixed signals
+
+Screenshots:
+
+![Evaluation output screenshot](Screenshot%202026-04-15%20024337.png)
+
+Example terminal output excerpts:
+
+```text
+=== High-Energy Pop ===
+1. Sunrise City by Neon Echo
+   Score: 7.86
+2. Gym Hero by Max Pulse
+   Score: 6.52
+3. Rooftop Lights by Indigo Parade
+   Score: 5.80
+```
+
+```text
+=== Chill Lofi ===
+1. Library Rain by Paper Lanterns
+   Score: 7.86
+2. Midnight Coding by LoRoom
+   Score: 7.81
+3. Focus Flow by LoRoom
+   Score: 6.91
+```
+
+```text
+=== Deep Intense Rock ===
+1. Storm Runner by Voltline
+   Score: 7.79
+2. Gym Hero by Max Pulse
+   Score: 5.24
+3. Iron Eclipse by Black Static
+   Score: 4.73
+```
+
+I also ran one weight-shift experiment where I doubled the importance of `energy` and cut the `genre` bonus in half. That made high-energy songs even more dominant. For example, `Rooftop Lights` moved above `Gym Hero` for the pop profile, which made the results different but not clearly better.
+
+CLI verification screenshot placeholder:
+
+![CLI verification screenshot](Screenshot%202026-04-15%20024327.png)
 
 ---
 
